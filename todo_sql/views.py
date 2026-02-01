@@ -6,29 +6,45 @@ from django.views.generic import UpdateView, DeleteView , CreateView, ListView# 
 from django.views import View  # <--- Не забудь добавить этот импорт!
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+
 
 # (get_object_or_404 - это более безопасный способ сделать .get)
 
 
+#        Регистрация
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
 
-class TaskCreateView(CreateView):
+
+
+
+class TaskCreateView(LoginRequiredMixin,CreateView):
     model = Task
     form_class = TaskForm
     template_name = 'add.html'       # Нам понадобится простой шаблон
     success_url = reverse_lazy('index') # Куда вернуться после успеха
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 # 2. КЛАСС ПРОСМОТРА (Вместо функции index)
-class TaskListView(ListView):
+class TaskListView(LoginRequiredMixin,ListView):
 
 
     model = Task
     template_name = 'index.html'
     context_object_name = 'tasks'  # Важно! Чтобы в HTML мы по-прежнему использовали имя 'tasks'
 
-    # Настройка сортировки (аналог order_by)
-    # Если в models.py есть ordering, эту строку можно не писать, но для надежности оставим:
-    ordering = ['-created_at']
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user).order_by('-created_at')
+
 
 
 

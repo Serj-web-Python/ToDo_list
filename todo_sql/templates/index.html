@@ -4,16 +4,37 @@
     <title>Список задач</title>
 </head>
 <body>
+<div style="background: #333; color: white; padding: 10px; display: flex; justify-content: space-between;">
+
+        <!-- Проверка: Аноним или Пользователь? -->
+        {% if user.is_authenticated %}
+            <span>Привет, <b>{{ user.username }}</b>! 👋</span>
+
+            <!-- Кнопка Выход -->
+            <!-- Мы используем форму для выхода, так безопаснее в новых версиях Django -->
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: red; border: none; color: white; cursor: pointer;">Выйти</button>
+            </form>
+        {% else %}
+            <span>Гость</span>
+            <div>
+                <a href="{% url 'login' %}" style="color: white;">Войти</a>
+                <a href="{% url 'signup' %}" style="color: white;">Регистрация</a>
+            </div>
+
+        {% endif %}
+
+    </div>
 
     <h1>Мои задачи</h1>
 
  <!-- Вместо формы теперь КНОПКА -->
     <div style="margin-bottom: 20px;">
-        <!-- 1. Кнопка: Создать задачу -->
-        <a href="{% url 'add' %}" style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 18px; margin-right: 10px;">
-            📝 Создать задачу
+        <a href="{% url 'add' %}" style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 18px;">
+            + Добавить задачу
         </a>
-       <!-- 2. НОВАЯ КНОПКА: Создать категорию -->
+        <!-- 2. НОВАЯ КНОПКА: Создать категорию -->
         <a href="{% url 'add_category' %}" style="background-color: #17a2b8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 18px;">
             📁 Создать категорию
         </a>
@@ -34,17 +55,12 @@
                 <a href="{% url 'edit' task.id %}" style="text-decoration: none; margin-left: 10px;">
                     ✏️
                 </a>
-
-                <!-- ЯРЛЫЧОК КАТЕГОРИИ -->
-                    <!-- Показываем, только если категория выбрана -->
             {% if task.category %}
                         <span style="background-color: #e0e0e0; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-right: 5px;">
                             {{ task.category.name }}
                         </span>
                     {% endif %}
-
                 <a href="{% url 'toggle' task.id %}" style="text-decoration: none; color: black; cursor: pointer;">
-
 
                 <!-- Заголовок и статус -->
                 {% if task.is_completed %}

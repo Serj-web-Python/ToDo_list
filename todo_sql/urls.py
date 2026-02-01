@@ -21,5 +21,6 @@ urlpatterns = [
 
     path('add-category/', views.CategoryCreateView.as_view(), name='add_category'),
 
+    path('signup/', views.SignUpView.as_view(), name='signup'),
 
 ]

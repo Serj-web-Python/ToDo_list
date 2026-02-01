@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User # Импорт модели Пользователя
 
 
 class Category(models.Model):
@@ -31,6 +32,8 @@ class Task(models.Model):
 
     category = models.ForeignKey(Category,on_delete=models.PROTECT,null=True, blank=True,verbose_name="Категория")
 
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,verbose_name="Пользователь")
     # Это магический метод.
     # Он говорит Django: "Когда будешь показывать эту задачу в админке, пиши её название, а не 'Task object (1)'"
     def __str__(self):
