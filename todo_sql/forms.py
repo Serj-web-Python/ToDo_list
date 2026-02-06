@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 from .models import Task,Category
 
 class TaskForm(forms.ModelForm):
@@ -17,3 +20,11 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+# НОВАЯ ФОРМА ДЛЯ РЕГИСТРАЦИИ С EMAIL
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Email адрес')  # Делаем поле обязательным
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']

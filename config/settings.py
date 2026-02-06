@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=zqso+rau3m1op$$3)g+yj=xug4ie^vym@-fcahxj-3ovfbm5v'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,13 +34,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'todo_sql',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo_sql'
+
 ]
 
 MIDDLEWARE = [
@@ -125,4 +129,19 @@ LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
 
+# settings.py
+# Говорим Django использовать реальный SMTP (почтовый протокол)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Адрес сервера Gmail
+EMAIL_HOST = 'smtp.gmail.com'
+# Порт (дверь), в которую стучаться (587 - стандарт для защищенной почты)
+EMAIL_PORT = 587
+# Включаем шифрование (чтобы письмо не перехватили)
+EMAIL_USE_TLS = True
+# Твоя настоящая почта (от имени которой придет письмо)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+# Тот самый 16-значный код из Шага 1 (БЕЗ пробелов)
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY')

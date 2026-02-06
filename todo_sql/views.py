@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect  # Не забудь redirect!
 from .models import Task, Category
-from .forms import TaskForm, CategoryForm # <--- 1. Импортируем нашу новую форму
+from .forms import TaskForm, CategoryForm, SignUpForm # <--- 1. Импортируем нашу новую форму
 from django.urls import reverse_lazy # Понадобится для переадресации
 from django.views.generic import UpdateView, DeleteView , CreateView, ListView# Импортируем готовый класс-редактор
 from django.views import View  # <--- Не забудь добавить этот импорт!
@@ -15,7 +15,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 #        Регистрация
 class SignUpView(CreateView):
-    form_class = UserCreationForm
+    form_class = SignUpForm  # <--- МЕНЯЕМ UserCreationForm НА НАШУ SignUpForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 

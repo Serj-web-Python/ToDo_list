@@ -28,7 +28,7 @@ class Task(models.Model):
     # auto_now_add=True значит "автоматически поставь текущее время в момент создания"
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     description = models.TextField(blank=True)
-    objects = models.Manager()  # Эту строчку лучше не писать. Django сделает всё сам.
+    #objects = models.Manager
 
     category = models.ForeignKey(Category,on_delete=models.PROTECT,null=True, blank=True,verbose_name="Категория")
 
